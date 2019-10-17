@@ -480,3 +480,8 @@ class SeaBreezeSpectrometerFeatureVENTANA(SeaBreezeSpectrometerFeatureOBP):
 
 class SeaBreezeSpectrometerFeatureSPARK(SeaBreezeSpectrometerFeatureOBP):
     pass
+
+
+class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
+    # TODO: check and change
+    pass

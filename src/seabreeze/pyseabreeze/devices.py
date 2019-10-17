@@ -207,8 +207,10 @@ class TriggerMode(enum.IntEnum):
     NORMAL = 0x00
     SOFTWARE = 0x01
     LEVEL = 0x01
+    HARDWARE_EDGE = 0x01
     SYNCHRONIZATION = 0x02
     HARDWARE = 0x03
+    HARDWARE_LEVEL = 0x03
     EDGE = 0x03
     SINGLE_SHOT = 0x04
     SELF_NORMAL = 0x80
@@ -930,5 +932,39 @@ class SPARK(SeaBreezeDevice):
     # features
     feature_classes = (
         sbf.spectrometer.SeaBreezeSpectrometerFeatureSPARK,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
+    )
+
+
+class HDX(SeaBreezeDevice):
+
+    model_name = 'HDX'
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x2003
+    # TODO: check and change
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+    usb_protocol = OBPProtocol
+
+    # spectrometer config
+    # TODO: check and change
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (1040, 1044))
+    # TODO: check and change
+    integration_time_min = 10000
+    # TODO: check and change
+    integration_time_max = 1600000000
+    integration_time_base = 1
+    # TODO: check and change
+    spectrum_num_pixel = 1044
+    # TODO: check and change
+    spectrum_raw_length = (1044 * 4) + 32  # XXX: Metadata
+    # TODO: check and change
+    spectrum_max_value = (2**18)-1
+    trigger_modes = TriggerMode.supported('NORMAL', 'HARDWARE_LEVEL', 'HARDWARE_EDGE')
+
+    # features
+    feature_classes = (
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
